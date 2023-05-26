@@ -2,6 +2,7 @@ package com.example.prayerstimesaap.di.app
 
 import android.content.Context
 import androidx.room.Room
+import com.example.prayerstimesaap.networking.PrayersApi
 import com.example.prayerstimesaap.data.PrayerDB
 import com.example.prayerstimesaap.di.RetrofitQ
 import com.example.prayerstimesaap.networking.UrlProvider
@@ -42,6 +43,10 @@ class AppModule {
     @Provides
     @AppScope
     fun urlProvider()=UrlProvider()
+
+    @Provides
+    @AppScope
+    fun prayersAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(PrayersApi::class.java)
 
 
 }

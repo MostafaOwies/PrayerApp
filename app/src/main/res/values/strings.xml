@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Prayers Times AAP</string>
+    <string name="Prayers">Prayers</string>
+    <string name="Qibla">Qibla</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
