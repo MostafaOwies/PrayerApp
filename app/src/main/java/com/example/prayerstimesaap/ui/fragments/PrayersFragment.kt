@@ -17,10 +17,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import okhttp3.internal.concurrent.formatDuration
+import okhttp3.internal.format
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Date
+import java.util.Locale
+import kotlin.math.log
 
 
 @AndroidEntryPoint
@@ -58,6 +68,7 @@ class PrayersFragment : Fragment() {
         getPrayers()
 
 
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,6 +87,11 @@ class PrayersFragment : Fragment() {
 
                                 prayersResponse = it
                                 prayerTimings = prayersResponse?.data?.timings?.toLocalTimeList()
+                                Log.d(TAG,"aaaaaaaaaaaaa${prayerTimings.toString()}" )
+                                Log.d(TAG,"Prayers${it?.data?.timings}")
+
+
+                                getCountDown()
 
                             }
 
@@ -105,16 +121,39 @@ class PrayersFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getCountDown() {
-        var currentTime = LocalTime.now()
-        var upComingPrayer :LocalTime?= null
-        for (prayerTiming in prayerTimings!!) {
-            if(prayerTiming > currentTime) {
-                upComingPrayer=prayerTiming
-                break
+        val currentDate = LocalDate.now()
+        val currentTime = LocalTime.now()
+
+        val upcomingPrayer = prayerTimings
+            ?.map { LocalTime.of(it.hour, it.minute) } // Convert prayer times to LocalTime
+            ?.filter { time -> LocalDateTime.of(currentDate, time) > LocalDateTime.of(currentDate, currentTime) }
+            ?.minOrNull() ?: prayerTimings?.first()
+
+        val prayerTimeForNextDay = upcomingPrayer?.isBefore(currentTime)
+
+        coroutineScope.launch {
+            while (isActive) {
+                val targetDateTime = if (prayerTimeForNextDay == true) {
+                    LocalDateTime.of(currentDate.plusDays(1), upcomingPrayer)
+                } else {
+                    LocalDateTime.of(currentDate, upcomingPrayer)
+                }
+
+                val remainingTime = Duration.between(LocalDateTime.now(), targetDateTime)
+                val formattedDuration = formatDuration(remainingTime)
+
+                binding?.upcomingPrayerLayout?.nextPrayerTimerTv?.text = formattedDuration
+                delay(1000)
             }
         }
+    }
 
-        val durationUntilPrayer = Duration.between(currentTime, upComingPrayer)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun formatDuration(duration: Duration): String {
+        val seconds = duration.seconds % 60
+        val minutes = (duration.seconds % 3600) / 60
+        val hours = duration.seconds / 3600
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
 
