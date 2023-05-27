@@ -43,6 +43,7 @@ class PrayersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel=(activity as MainActivity).viewModel
+        getPrayers ()
     }
 
 
@@ -52,14 +53,21 @@ class PrayersFragment : Fragment() {
                 viewModel.prayers.collect{response ->
                     when(response){
                         is Resource.Success -> {
-                            Log.d(TAG,"Prayers${response.data}")
+                            response.data.let {
+
+                                Log.d(TAG,"Prayers${it?.data?.timings}")
+                                Log.d(TAG,"Prayers")
+                            }
 
                         }
 
                         is Resource.Error -> {
                             //hideProgressBar()
+
+                            Log.d(TAG,"Prayers failed${response.message}")
                         }
                         is Resource.Loading -> {
+                            Log.d(TAG,"Prayers loading")
                             //showProgressBar()
                         }
                         else -> {}

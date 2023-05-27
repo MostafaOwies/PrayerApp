@@ -1,5 +1,7 @@
 package com.example.prayerstimesaap.networking
 
+import android.content.ContentValues
+import android.util.Log
 import com.example.prayerstimesaap.prayers.PrayerResponse
 import com.example.prayerstimesaap.utils.Resource
 import kotlinx.coroutines.CancellationException
@@ -17,20 +19,17 @@ class PrayersUseCase @Inject constructor() {
         return withContext(Dispatchers.Default) {
             try {
                 if (response.isSuccessful) {
+                    Log.d(ContentValues.TAG, "Prayers")
                     response.body()?.let {
-                        if (prayersResponse == null) {
-                            prayersResponse = it
-                        } else {
-                            val oldResponse = prayersResponse?.data
-                            val newResponse = it.data
-
-                        }
+                        prayersResponse = it
                         return@withContext Resource.Success(prayersResponse ?: it)
                     }
                 }
+                Log.d(ContentValues.TAG, "Prayers Error")
                 return@withContext Resource.Error(response.message(), null)
             } catch (t: Throwable) {
                 if (t !is CancellationException) {
+                    Log.d(ContentValues.TAG, "Prayers Throwable")
                     return@withContext Resource.Error(response.message(), null)
                 } else {
                     throw t

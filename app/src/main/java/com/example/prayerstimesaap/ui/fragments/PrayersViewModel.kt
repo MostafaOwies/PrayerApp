@@ -1,5 +1,7 @@
 package com.example.prayerstimesaap.ui.fragments
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.prayerstimesaap.networking.PrayersRepo
@@ -28,7 +30,9 @@ class PrayersViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val date: String = SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date())
+            val date: String = SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date()).toString()
+            Log.d(ContentValues.TAG,date)
+
             getPrayers(date, "eg", 5)
         }
     }
