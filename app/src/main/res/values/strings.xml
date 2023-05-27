@@ -15,4 +15,5 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="upcoming_prayer">Upcoming Prayer</string>
+    <string name="location_logo">location logo</string>
 </resources>

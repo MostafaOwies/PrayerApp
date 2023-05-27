@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/pad_xxlarge"
-        android:text="Fajr"
+        android:text="ggggg"
         android:textSize="@dimen/txt_title"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/next_prayer_title_tv"

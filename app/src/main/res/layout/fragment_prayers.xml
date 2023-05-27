@@ -16,6 +16,12 @@
             android:padding="12dp">
 
             <include
+                android:id="@+id/location_layout"
+                layout="@layout/location_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_small"/>
+            <include
                 android:id="@+id/day_date_layout"
                 layout="@layout/date_layout"
                 android:layout_width="match_parent"

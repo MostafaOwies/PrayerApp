@@ -6,7 +6,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
-class PrayersRepo @Inject constructor(private val prayersApi: PrayersApi) : IPrayersRepo {
+class PrayersRepo @Inject constructor(
+    private val prayersApi: PrayersApi,
+) : IPrayersRepo {
 
 
     override suspend fun getPrayers(

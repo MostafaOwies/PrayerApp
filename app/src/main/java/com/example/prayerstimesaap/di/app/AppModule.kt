@@ -1,5 +1,6 @@
 package com.example.prayerstimesaap.di.app
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.prayerstimesaap.networking.PrayersApi
@@ -7,6 +8,7 @@ import com.example.prayerstimesaap.data.PrayerDB
 import com.example.prayerstimesaap.di.RetrofitQ
 import com.example.prayerstimesaap.networking.UrlProvider
 import com.example.prayerstimesaap.utils.Constants.DATABASE_NAME
+import com.example.prayerstimesaap.utils.LocationUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,5 +50,17 @@ class AppModule {
     @AppScope
     fun prayersAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(PrayersApi::class.java)
 
+
+    @Provides
+    @AppScope
+    fun provideLocationUtils(context: Context): LocationUtils {
+        return LocationUtils(context)
+    }
+
+    @Provides
+    @AppScope
+    fun provideApplicationContext(application: Application): Context {
+        return application.applicationContext
+    }
 
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/pad_small"
+        app:cardCornerRadius="@dimen/pad_med"
+        app:cardElevation="@dimen/pad_small">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/pad_xxlarge"
+            android:paddingBottom="@dimen/pad_xxlarge">
+
+
+            <TextView
+                android:id="@+id/location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_xxlarge"
+                android:text="Location"
+                android:paddingStart="@dimen/pad_small"
+                android:paddingEnd="@dimen/pad_small"
+                android:textSize="@dimen/txt_title"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/location_png_IV"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/location_png_IV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:padding="@dimen/pad_large"
+                android:paddingEnd="@dimen/pad_small"
+                android:paddingStart="@dimen/pad_large"
+                android:src="@drawable/location_png"
+                app:tint="@color/md_theme_light_primary"
+                android:contentDescription="@string/location_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/location_tv"
+                app:layout_constraintBottom_toBottomOf="@id/location_tv"
+
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</layout>
