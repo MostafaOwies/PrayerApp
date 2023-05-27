@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.prayerstimesaap.networking.PrayersRepo
 import com.example.prayerstimesaap.networking.PrayersUseCase
 import com.example.prayerstimesaap.prayers.PrayerResponse
+import com.example.prayerstimesaap.ui.fragments.IPrayersViewModel
 import com.example.prayerstimesaap.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
