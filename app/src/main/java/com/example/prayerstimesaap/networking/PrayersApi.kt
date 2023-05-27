@@ -13,12 +13,10 @@ interface PrayersApi {
 
     @GET("v1/timingsByCity/{date}")
     suspend fun getTimings(
-        @Path("date")
-        date: String,
-        @Query("country")
-        countryCode: String = "eg",
-        @Query("method")
-        method: Int = 5,
+        @Path("date") date: String,
+        @Query("city") city: String,
+        @Query("country") country: String,
+        @Query("method") method: Int
 
         ): Response<PrayerResponse>
 }

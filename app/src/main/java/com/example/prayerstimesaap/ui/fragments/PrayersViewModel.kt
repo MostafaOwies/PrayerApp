@@ -33,16 +33,16 @@ class PrayersViewModel @Inject constructor(
             val date: String = SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date()).toString()
             Log.d(ContentValues.TAG,date)
 
-            getPrayers(date, "eg", 5)
+            getPrayers(date, "Cairo","eg", 5)
         }
     }
 
-    override suspend fun getPrayers(date: String, countryCode: String, method: Int) =
+    override suspend fun getPrayers(date: String, city:String,countryCode: String, method: Int) =
         withContext(Dispatchers.Default) {
 
             try {
                 _prayers.value = Resource.Loading()
-                _prayers.value = prayersUseCase.handlePrayersResponse(prayersRepo.getPrayers(date, countryCode, method))
+                _prayers.value = prayersUseCase.handlePrayersResponse(prayersRepo.getPrayers(date,city, countryCode, method))
             } catch (t: Throwable) {
                 throw t
             }

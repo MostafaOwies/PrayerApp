@@ -1,0 +1,62 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="pad_small">@dimen/_4sdp</dimen>
+    <dimen name="pad_med">@dimen/_8sdp</dimen>
+    <dimen name="pad_large">@dimen/_12sdp</dimen>
+    <dimen name="pad_xlarge">@dimen/_16sdp</dimen>
+    <dimen name="pad_xxlarge">@dimen/_20sdp</dimen>
+
+    <dimen name="txt_small">@dimen/_10ssp</dimen>
+    <dimen name="txt_med">@dimen/_12ssp</dimen>
+    <dimen name="txt_large">@dimen/_14ssp</dimen>
+    <dimen name="txt_xlarge">@dimen/_16ssp</dimen>
+    <dimen name="txt_title">@dimen/_20ssp</dimen>
+
+    <dimen name="icon_square">@dimen/_20sdp</dimen>
+    <dimen name="icon_square_small">@dimen/_14sdp</dimen>
+
+    <dimen name="button_square_small">@dimen/_22sdp</dimen>
+    <dimen name="button_square_pad">@dimen/_4sdp</dimen>
+    <dimen name="button_square">@dimen/_28sdp</dimen>
+
+    <dimen name="image_square">@dimen/_70sdp</dimen>
+
+    <!--    activity_login-->
+    <dimen name="mobile_image_size">@dimen/_110sdp</dimen>
+
+    <!--    activity_main-->
+    <dimen name="logo_width">@dimen/_80sdp</dimen>
+    <dimen name="nav_bar_width">@dimen/_170sdp</dimen>
+
+    <!--    category_list_item-->
+    <dimen name="category_height">@dimen/_70sdp</dimen>
+
+    <!--    completed_item-->
+    <!--    consumer_order_item_row-->
+    <!--    new_order_item_row-->
+    <dimen name="status_width">@dimen/_80sdp</dimen>
+
+    <!--    dialog_loading_bar-->
+    <dimen name="loading_size">@dimen/_30sdp</dimen>
+
+    <!--    fragment_account-->
+    <!--    fragment_charge-->
+    <dimen name="bg_height">@dimen/_150sdp</dimen>
+
+    <!--    fragment_settings-->
+    <dimen name="bg_height_small">@dimen/_75sdp</dimen>
+
+    <!--    fragment_dialog_sharing_items-->
+    <dimen name="sharing_list_height">@dimen/_250sdp</dimen>
+
+    <!--    list_empty_view-->
+    <dimen name="no_data_image_height">@dimen/_90sdp</dimen>
+
+    <!--    side_nav_header-->
+    <dimen name="res_logo">@dimen/_40sdp</dimen>
+    <dimen name="extremeRadius">@dimen/_15sdp</dimen>
+    <dimen name="big_square_img">@dimen/_140sdp</dimen>
+</resources>
