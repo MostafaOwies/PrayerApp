@@ -84,7 +84,7 @@ class QiblaFragmnet : Fragment() {
                             response.data.let {
                                 Log.d(TAG, "Qibla ${it?.data}")
                                 val intDirection = it?.data?.direction?.toInt()
-                                binding?.directionTtv?.text = intDirection.toString() + "\u00B0"
+                                binding?.qiblaLayout?.directionTtv?.text = intDirection.toString() + "\u00B0"
                             }
                         }
 
@@ -116,7 +116,7 @@ class QiblaFragmnet : Fragment() {
                             val addresses =
                                 geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                             val country = addresses?.let { getCountryName(it) }
-                            binding?.locationTtv?.text = country
+                            binding?.qiblaLayout?.locationTtv?.text = country
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -143,8 +143,8 @@ class QiblaFragmnet : Fragment() {
                 val qiblaDirection = qiblaResponse.data.direction.toFloat()
                 val diff = qiblaDirection - degree360
                 val adjustedDiff = (diff + 540) % 360 - 180
-                binding?.handCompass?.rotation = -adjustedDiff
-                binding?.directionTitleTtv?.text = degree360.toString()
+                binding?.qiblaLayout?.handCompass?.rotation = -adjustedDiff
+                binding?.qiblaLayout?.directionTitleTtv?.text = degree360.toString()+ "\u00B0"
             }
         }
     }
