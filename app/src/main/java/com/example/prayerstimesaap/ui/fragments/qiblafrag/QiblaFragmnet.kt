@@ -36,7 +36,8 @@ import kotlin.math.roundToInt
 class QiblaFragmnet : Fragment() {
 
 
-    @Inject lateinit var compassManager: CompassManager
+    @Inject
+    lateinit var compassManager: CompassManager
     private var _binding: FragmentQiblaFragmnetBinding? = null
     private val binding get() = _binding
 
@@ -58,6 +59,7 @@ class QiblaFragmnet : Fragment() {
         return binding?.root
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -65,7 +67,7 @@ class QiblaFragmnet : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         setupCompassRotation()
-        Log.d(TAG ,"Qibla ")
+        Log.d(TAG, "Qibla ")
         getQibla()
         getLocation()
 
@@ -74,17 +76,18 @@ class QiblaFragmnet : Fragment() {
     }
 
     private fun getQibla() {
-        coroutineScope.launch{
+        coroutineScope.launch {
             try {
-             viewModel.qiblaDirection.collect{response->
-                    when(response) {
+                viewModel.qiblaDirection.collect { response ->
+                    when (response) {
                         is Resource.Success -> {
                             response.data.let {
-                                Log.d(TAG ,"Qibla ${it?.data}")
-                                val intDirection= it?.data?.direction?.toInt()
-                                binding?.directionTtv?.text=intDirection.toString()+"\u00B0"
+                                Log.d(TAG, "Qibla ${it?.data}")
+                                val intDirection = it?.data?.direction?.toInt()
+                                binding?.directionTtv?.text = intDirection.toString() + "\u00B0"
                             }
                         }
+
                         is Resource.Error -> {
                             Log.d(TAG, "Qibla failed${response.message}")
                         }
@@ -95,8 +98,8 @@ class QiblaFragmnet : Fragment() {
 
                         else -> {}
                     }
-             }
-            }catch (e:Exception) {
+                }
+            } catch (e: Exception) {
                 e.stackTrace
             }
         }
@@ -110,7 +113,8 @@ class QiblaFragmnet : Fragment() {
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     coroutineScope.launch {
                         try {
-                            val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                            val addresses =
+                                geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                             val country = addresses?.let { getCountryName(it) }
                             binding?.locationTtv?.text = country
                         } catch (e: Exception) {
@@ -120,6 +124,7 @@ class QiblaFragmnet : Fragment() {
                 }
             }
     }
+
     private fun getCountryName(addresses: List<Address>): String? {
         if (addresses.isNotEmpty()) {
             val address = addresses[0]
@@ -131,7 +136,16 @@ class QiblaFragmnet : Fragment() {
 
     private fun setupCompassRotation() {
         compassManager.onAzimuthChangedListener = { azimuth ->
-            binding?.compassImageview?.rotation = -azimuth.roundToInt().toFloat()
+            val degree = azimuth.roundToInt()
+            val degree360 = (degree + 360) % 360
+
+            viewModel.qiblaDirection.value.data?.let { qiblaResponse ->
+                val qiblaDirection = qiblaResponse.data.direction.toFloat()
+                val diff = qiblaDirection - degree360
+                val adjustedDiff = (diff + 540) % 360 - 180
+                binding?.handCompass?.rotation = -adjustedDiff
+                binding?.directionTitleTtv?.text = degree360.toString()
+            }
         }
     }
 
