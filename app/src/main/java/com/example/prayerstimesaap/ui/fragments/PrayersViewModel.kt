@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.prayerstimesaap.networking.PrayersRepo
 import com.example.prayerstimesaap.networking.PrayersUseCase
 import com.example.prayerstimesaap.prayers.PrayerResponse
-import com.example.prayerstimesaap.ui.fragments.IPrayersViewModel
 import com.example.prayerstimesaap.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +36,8 @@ class PrayersViewModel @Inject constructor(
             getPrayers(date, "Cairo","eg", 5)
         }
     }
+
+
 
     override suspend fun getPrayers(date: String, city:String,countryCode: String, method: Int) =
         withContext(Dispatchers.Default) {

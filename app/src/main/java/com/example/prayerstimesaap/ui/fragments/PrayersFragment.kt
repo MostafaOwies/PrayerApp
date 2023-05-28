@@ -22,7 +22,6 @@ import com.example.prayerstimesaap.MainActivity
 import com.example.prayerstimesaap.databinding.FragmentPrayersBinding
 import com.example.prayerstimesaap.prayers.PrayerResponse
 import com.example.prayerstimesaap.utils.Constants
-import com.example.prayerstimesaap.utils.LocationUtils
 import com.example.prayerstimesaap.utils.Resource
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -41,7 +40,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -49,8 +47,6 @@ import javax.inject.Inject
 @SuppressLint("MissingPermission")
 class PrayersFragment : Fragment() {
 
-    @Inject
-    lateinit var locationUtils: LocationUtils
     private var _binding: FragmentPrayersBinding? = null
     private val binding get() = _binding
 
@@ -134,7 +130,9 @@ class PrayersFragment : Fragment() {
     private fun getCountryName(addresses: List<Address>): String? {
         if (addresses.isNotEmpty()) {
             val address = addresses[0]
-            return address.countryName ?: address.countryCode
+            val country = address.countryName
+            val city= address.subAdminArea
+            return "$country,  $city"
         }
         return null
     }
