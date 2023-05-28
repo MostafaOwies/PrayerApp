@@ -12,10 +12,62 @@
         android:layout_height="@dimen/_200sdp"
         android:contentDescription="@string/compass"
         android:scaleType="fitXY"
+        android:layout_marginBottom="@dimen/pad_xxlarge"
         android:src="@drawable/compass_drawable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/direction_title_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/pad_xxlarge"
+        android:textStyle="bold"
+        android:paddingBottom="@dimen/pad_xxlarge"
+        android:text="100\u00B0"
+        android:textSize="@dimen/txt_title"
+        app:layout_constraintTop_toBottomOf="@id/compass_imageview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/approximate_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/approximate_ttv"
+
+        android:textColor="@color/colorPrimDark"
+        android:paddingTop="@dimen/pad_xxlarge"
+        android:textSize="@dimen/txt_large"
+        app:layout_constraintTop_toBottomOf="@id/direction_title_ttv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <TextView
+        android:id="@+id/location_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mansoura Qism 2"
+        android:textSize="@dimen/txt_large"
+        app:layout_constraintTop_toBottomOf="@id/approximate_ttv"
+        app:layout_constraintStart_toStartOf="@id/approximate_ttv"
+        app:layout_constraintEnd_toStartOf="@id/direction_ttv"
+        />
+    <TextView
+        android:id="@+id/direction_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="100"
+        android:textSize="@dimen/txt_large"
+        app:layout_constraintTop_toBottomOf="@id/approximate_ttv"
+        app:layout_constraintStart_toEndOf="@id/location_ttv"
+        app:layout_constraintEnd_toEndOf="@id/approximate_ttv"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

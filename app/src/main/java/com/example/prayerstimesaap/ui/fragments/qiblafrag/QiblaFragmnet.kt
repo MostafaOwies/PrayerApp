@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.example.prayerstimesaap.MainActivity
+import com.example.prayerstimesaap.R
 import com.example.prayerstimesaap.databinding.FragmentQiblaFragmnetBinding
 import com.example.prayerstimesaap.utils.CompassManager
 import com.example.prayerstimesaap.utils.Resource
@@ -68,6 +69,8 @@ class QiblaFragmnet : Fragment() {
                         is Resource.Success -> {
                             response.data.let {
                                 Log.d(TAG ,"Qibla ${it?.data}")
+                                val intDirection= it?.data?.direction?.toInt()
+                                binding?.directionTtv?.text=intDirection.toString()+"\u00B0"
                             }
                         }
                         is Resource.Error -> {

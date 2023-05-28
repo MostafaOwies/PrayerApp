@@ -17,4 +17,8 @@
     <string name="upcoming_prayer">Upcoming Prayer</string>
     <string name="location_logo">location logo</string>
     <string name="compass">compass image</string>
+    <string name="approximate_ttv">Approximate Qibla Direction in</string>
+    <string name="location">location\n</string>
+    <string name="approximate">Approximate Qibla Direction\nMansoura Qism 2 </string>
+
 </resources>
