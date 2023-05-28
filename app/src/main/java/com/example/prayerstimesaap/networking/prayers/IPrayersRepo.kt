@@ -1,4 +1,4 @@
-package com.example.prayerstimesaap.networking
+package com.example.prayerstimesaap.networking.prayers
 
 import com.example.prayerstimesaap.prayers.PrayerResponse
 import retrofit2.Response

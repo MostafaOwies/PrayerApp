@@ -7,7 +7,12 @@
 
     <fragment
         android:id="@+id/prayersFragment"
-        android:name="com.example.prayerstimesaap.ui.fragments.PrayersFragment"
+        android:name="com.example.prayerstimesaap.ui.fragments.prayersfrag.PrayersFragment"
         android:label="fragment_prayers"
         tools:layout="@layout/fragment_prayers" />
+    <fragment
+        android:id="@+id/qiblaFragmnet"
+        android:name="com.example.prayerstimesaap.ui.fragments.qiblafrag.QiblaFragmnet"
+        android:label="fragment_qibla_fragmnet"
+        tools:layout="@layout/fragment_qibla_fragmnet" />
 </navigation>

@@ -2,12 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/PrayersFragment"
+        android:id="@+id/prayersFragment"
         android:enabled="true"
+        android:icon="@drawable/prayers_nav_iqn"
         android:title="@string/Prayers" />
     <item
-        android:id="@+id/QiblaFragment"
+        android:id="@+id/qiblaFragmnet"
         android:enabled="true"
+        android:icon="@drawable/compass_24"
         android:title="@string/Qibla" />
 
 </menu>

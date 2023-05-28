@@ -3,10 +3,11 @@ package com.example.prayerstimesaap.di.app
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.prayerstimesaap.networking.PrayersApi
+import com.example.prayerstimesaap.networking.prayers.PrayersApi
 import com.example.prayerstimesaap.data.PrayerDB
 import com.example.prayerstimesaap.di.RetrofitQ
 import com.example.prayerstimesaap.networking.UrlProvider
+import com.example.prayerstimesaap.networking.qibla.QiblaApi
 import com.example.prayerstimesaap.utils.Constants.DATABASE_NAME
 import com.example.prayerstimesaap.utils.LocationUtils
 import dagger.Module
@@ -16,6 +17,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 
 @Module
@@ -49,6 +51,10 @@ class AppModule {
     @Provides
     @AppScope
     fun prayersAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(PrayersApi::class.java)
+
+    @Provides
+    @AppScope
+    fun QiblaAPI(@RetrofitQ retrofit: Retrofit) = retrofit.create(QiblaApi::class.java)
 
 
     @Provides

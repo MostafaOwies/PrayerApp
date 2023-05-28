@@ -1,4 +1,4 @@
-package com.example.prayerstimesaap.ui.fragments
+package com.example.prayerstimesaap.ui.fragments.prayersfrag
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -76,7 +76,7 @@ class PrayersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
+        viewModel = (activity as MainActivity).prayersViewModel
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())

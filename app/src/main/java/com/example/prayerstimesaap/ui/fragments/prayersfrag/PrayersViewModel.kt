@@ -1,11 +1,11 @@
-package com.example.prayerstimesaap.ui.fragments
+package com.example.prayerstimesaap.ui.fragments.prayersfrag
 
 import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.prayerstimesaap.networking.PrayersRepo
-import com.example.prayerstimesaap.networking.PrayersUseCase
+import com.example.prayerstimesaap.networking.prayers.PrayersRepo
+import com.example.prayerstimesaap.networking.prayers.PrayersUseCase
 import com.example.prayerstimesaap.prayers.PrayerResponse
 import com.example.prayerstimesaap.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,5 +1,7 @@
-package com.example.prayerstimesaap.networking
+package com.example.prayerstimesaap.networking.prayers
 
+import com.example.prayerstimesaap.networking.prayers.IPrayersRepo
+import com.example.prayerstimesaap.networking.prayers.PrayersApi
 import com.example.prayerstimesaap.prayers.PrayerResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
