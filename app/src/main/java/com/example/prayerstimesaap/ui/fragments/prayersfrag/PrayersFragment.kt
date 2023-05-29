@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.prayerstimesaap.MainActivity
 import com.example.prayerstimesaap.adapters.PrayersAdapter
 import com.example.prayerstimesaap.databinding.FragmentPrayersBinding
+import com.example.prayerstimesaap.prayer.Data
 import com.example.prayerstimesaap.prayer.TimingsResponse
 import com.example.prayerstimesaap.utils.Constants
 import com.example.prayerstimesaap.utils.Resource
@@ -41,6 +42,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -58,6 +60,9 @@ class PrayersFragment : Fragment() {
 
     var prayersResponse: TimingsResponse? = null
     var prayerTimings: List<LocalTime>? = null
+
+    var currentDate = LocalDate.now()
+    var filteredPrayers :List<Data>?= null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
@@ -182,7 +187,13 @@ class PrayersFragment : Fragment() {
                     when (response) {
                         is Resource.Success -> {
                             response.data.let {
-                                adapter.difference.submitList(it?.data)
+                                Log.d(TAG, "Prayers failed${it?.data}")
+                                filteredPrayers = it?.data?.filter { prayer ->
+                                    val prayerDate = LocalDate.parse(prayer.date.gregorian.date, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                                    prayerDate >= currentDate
+                                }
+
+                                adapter.difference.submitList(filteredPrayers)
                             }
                         }
 

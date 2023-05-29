@@ -26,7 +26,9 @@ class PrayersAdapter : BaseAdapter<Data>() {
                 ishaTimer.text = formatTime(item.timings.Isha)
                 dayDateLayout.dateOfDay.text=item.date.gregorian.date
                 dayDateLayout.dayTitle.text=item.date.gregorian.weekday.en
-
+                dayDateLayout.hijriDateLayout.hijriDayTv.text=item.date.hijri.day
+                dayDateLayout.hijriDateLayout.hijriMonthTv.text=item.date.hijri.month.en
+                dayDateLayout.hijriDateLayout.hijriYearTv.text=item.date.hijri.year
             }
         }
     }
