@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/pad_med"
-    android:paddingTop="@dimen/pad_xxlarge">
+    android:padding="@dimen/pad_large"
+
+    >
 
     <TextView
         android:id="@+id/day_title"
@@ -36,6 +37,7 @@
         android:layout_weight="1"
         android:backgroundTint="@color/white"
         android:paddingHorizontal="@dimen/pad_xlarge"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/prev"
         android:textAlignment="center"
         android:textSize="@dimen/txt_xlarge"
@@ -51,6 +53,7 @@
         android:layout_weight="1"
         android:backgroundTint="@color/white"
         android:paddingHorizontal="@dimen/pad_xlarge"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/next"
         android:textAlignment="center"
         android:textSize="@dimen/txt_xlarge"

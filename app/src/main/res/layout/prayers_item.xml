@@ -4,23 +4,32 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
-    android:padding="@dimen/pad_large">
+    >
 
+    <include
+        android:id="@+id/day_date_layout"
+        layout="@layout/date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
     <TextView
         android:id="@+id/fajr_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         tools:text="@string/mock_timer"
         android:textSize="@dimen/txt_large"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/day_date_layout" />
 
     <TextView
         android:id="@+id/dhuhr_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         tools:text="@string/mock_timer"
         android:textSize="@dimen/txt_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +40,7 @@
         android:id="@+id/asr_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         tools:text="@string/mock_timer"
         android:textSize="@dimen/txt_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +51,7 @@
         android:id="@+id/maghrib_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         tools:text="@string/mock_timer"
         android:textSize="@dimen/txt_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +62,7 @@
         android:id="@+id/isha_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         tools:text="@string/mock_timer"
         android:textSize="@dimen/txt_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,17 +72,17 @@
         android:id="@+id/fajr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/fajr"
         android:textSize="@dimen/txt_large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/day_date_layout" />
 
     <TextView
         android:id="@+id/dhuhr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/dhuhr"
         android:textSize="@dimen/txt_large"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +93,7 @@
         android:id="@+id/asr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/asr"
         android:textSize="@dimen/txt_large"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +104,7 @@
         android:id="@+id/maghrib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/maghrib"
         android:textSize="@dimen/txt_large"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +115,7 @@
         android:id="@+id/isha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/pad_large"
+        android:paddingVertical="@dimen/pad_xlarge"
         android:text="@string/isha"
         android:textSize="@dimen/txt_large"
         app:layout_constraintStart_toStartOf="parent"

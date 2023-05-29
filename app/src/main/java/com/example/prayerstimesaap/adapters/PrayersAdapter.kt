@@ -24,6 +24,8 @@ class PrayersAdapter : BaseAdapter<Data>() {
                 asrTimer.text =formatTime( item.timings.Asr)
                 maghribTimer.text =formatTime( item.timings.Maghrib)
                 ishaTimer.text = formatTime(item.timings.Isha)
+                dayDateLayout.dateOfDay.text=item.date.gregorian.date
+                dayDateLayout.dayTitle.text=item.date.gregorian.weekday.en
 
             }
         }
