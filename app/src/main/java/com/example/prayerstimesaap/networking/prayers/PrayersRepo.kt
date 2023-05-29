@@ -1,8 +1,7 @@
 package com.example.prayerstimesaap.networking.prayers
 
-import com.example.prayerstimesaap.networking.prayers.IPrayersRepo
-import com.example.prayerstimesaap.networking.prayers.PrayersApi
-import com.example.prayerstimesaap.prayers.PrayerResponse
+
+import com.example.prayerstimesaap.prayer.PrayerResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -14,12 +13,13 @@ class PrayersRepo @Inject constructor(
 
 
     override suspend fun getPrayers(
-        date: String,
-        city: String,
-        countryCode: String,
-        method: Int
+        year: Int,
+        month: Int,
+        latitude: Double,
+        longitude: Double,
+        method:Int
     ): Response<PrayerResponse> = withContext(Dispatchers.Default) {
-        prayersApi.getTimings(date, city, countryCode, method)
+        prayersApi.getTimings(year, month, latitude, longitude,method)
     }
 
 }

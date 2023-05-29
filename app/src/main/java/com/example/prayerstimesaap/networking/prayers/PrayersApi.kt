@@ -1,21 +1,19 @@
 package com.example.prayerstimesaap.networking.prayers
 
-import com.example.prayerstimesaap.prayers.PrayerResponse
+import com.example.prayerstimesaap.prayer.PrayerResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 interface PrayersApi {
 
-    @GET("v1/timingsByCity/{date}")
+    @GET("calendar/{year}/{month}")
     suspend fun getTimings(
-        @Path("date") date: String,
-        @Query("city") city: String,
-        @Query("country") country: String,
+        @Path("year") year: Int,
+        @Path("month") month: Int,
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
         @Query("method") method: Int
 
     ): Response<PrayerResponse>

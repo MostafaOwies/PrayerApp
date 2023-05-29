@@ -1,14 +1,15 @@
 package com.example.prayerstimesaap.networking.prayers
 
-import com.example.prayerstimesaap.prayers.PrayerResponse
+import com.example.prayerstimesaap.prayer.PrayerResponse
 import retrofit2.Response
 
 interface IPrayersRepo {
 
     suspend fun getPrayers(
-        date: String,
-        city: String,
-        countryCode: String,
-        method: Int
+        year: Int,
+        month: Int,
+        latitude: Double,
+        longitude: Double,
+        method :Int
     ): Response<PrayerResponse>
 }

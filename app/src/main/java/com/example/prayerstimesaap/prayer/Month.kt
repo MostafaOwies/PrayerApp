@@ -1,4 +1,4 @@
-package com.example.prayerstimesaap.prayers
+package com.example.prayerstimesaap.prayer
 
 data class Month(
     val en: String,

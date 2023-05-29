@@ -1,7 +1,7 @@
-package com.example.prayerstimesaap.prayers
+package com.example.prayerstimesaap.prayer
 
 data class PrayerResponse(
     val code: Int,
-    val data: Data,
+    val data: List<Data>,
     val status: String
 )

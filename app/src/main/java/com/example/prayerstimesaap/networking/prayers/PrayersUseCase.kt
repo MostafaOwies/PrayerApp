@@ -2,7 +2,7 @@ package com.example.prayerstimesaap.networking.prayers
 
 import android.content.ContentValues
 import android.util.Log
-import com.example.prayerstimesaap.prayers.PrayerResponse
+import com.example.prayerstimesaap.prayer.PrayerResponse
 import com.example.prayerstimesaap.utils.Resource
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
