@@ -16,11 +16,11 @@ class PrayersRepo @Inject constructor(
     override suspend fun getPrayers(
         year: Int,
         month: Int,
-        latitude: Double,
-        longitude: Double,
+        city: String,
+        country: String,
         method:Int
     ): Response<PrayerResponse> = withContext(Dispatchers.Default) {
-        prayersApi.getTimings(year, month, latitude, longitude,method)
+        prayersApi.getTimings(year, month, city, country,method)
     }
 
     override suspend fun getTimings(

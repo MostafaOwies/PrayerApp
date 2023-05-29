@@ -43,11 +43,9 @@ class PrayersViewModel @Inject constructor(
             val currentDate = LocalDate.now()
             val currentMonth = currentDate.monthValue
             val currentYear = currentDate.year
-            val latitude = 34.4526
-            val longitude = 19.6866
             val method = 5
 
-            getPrayers(currentYear, currentMonth, longitude, latitude, method)
+            getPrayers(currentYear, currentMonth, "Cairo", "eg", method)
 
             getUpcomingPrayers(date, "Cairo","eg", 5)
         }
@@ -57,9 +55,9 @@ class PrayersViewModel @Inject constructor(
     override suspend fun getPrayers(
         year: Int,
         month: Int,
-        latitude: Double,
-        longitude: Double,
-        method: Int
+        city: String,
+        country: String,
+        method:Int
     ) =
         withContext(Dispatchers.Default) {
             try {
@@ -68,8 +66,8 @@ class PrayersViewModel @Inject constructor(
                     prayersRepo.getPrayers(
                         year,
                         month,
-                        latitude,
-                        longitude,
+                        city,
+                        country,
                         method
                     )
                 )

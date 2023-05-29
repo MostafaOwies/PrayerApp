@@ -9,12 +9,12 @@ import retrofit2.http.Query
 
 interface PrayersApi {
 
-    @GET("calendar/{year}/{month}")
+    @GET("calendarByCity/{year}/{month}")
     suspend fun getTimings(
         @Path("year") year: Int,
         @Path("month") month: Int,
-        @Query("latitude") latitude: Double,
-        @Query("longitude") longitude: Double,
+        @Query("city") city: String,
+        @Query("country") country: String,
         @Query("method") method: Int
 
     ): Response<PrayerResponse>
