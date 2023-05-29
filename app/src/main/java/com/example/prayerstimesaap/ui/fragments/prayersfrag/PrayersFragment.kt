@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.prayerstimesaap.MainActivity
 import com.example.prayerstimesaap.adapters.PrayersAdapter
 import com.example.prayerstimesaap.databinding.FragmentPrayersBinding
@@ -194,7 +195,9 @@ class PrayersFragment : Fragment() {
         binding?.prayerLayout?.rvPrayers?.adapter=adapter
         binding?.prayerLayout?.rvPrayers?.layoutManager= LinearLayoutManager(activity)
         binding?.prayerLayout?.rvPrayers?.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-
+        val pagerSnapHelper = PagerSnapHelper()
+        pagerSnapHelper.attachToRecyclerView(binding?.prayerLayout?.rvPrayers)
+        binding?.prayerLayout?.viewPager?.adapter = PrayersAdapter(this)
     }
 
     //Setup the count down for the upcoming prayer
