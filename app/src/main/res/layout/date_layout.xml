@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/pad_med"
-    android:layout_marginTop="@dimen/pad_xlarge">
+    android:paddingTop="@dimen/pad_xxlarge">
 
     <TextView
         android:id="@+id/day_title"

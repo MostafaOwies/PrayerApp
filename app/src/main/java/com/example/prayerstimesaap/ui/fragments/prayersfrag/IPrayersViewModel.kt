@@ -6,6 +6,9 @@ interface IPrayersViewModel {
         month: Int,
         latitude: Double,
         longitude: Double,
-        method:Int
+        method: Int
     )
+
+    suspend fun getUpcomingPrayers(date: String, city: String, countryCode: String, method: Int)
+
 }

@@ -8,17 +8,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.example.prayerstimesaap.databinding.PrayersItemBinding
 import com.example.prayerstimesaap.prayer.Data
-import com.example.prayerstimesaap.ui.fragments.prayersfrag.PrayersFragment
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 
-class PrayersAdapter(private val context: PrayersFragment): BaseAdapter<Data>() {
-
-     var prayersResponse: Data? = null
-     var prayerTimings: List<LocalTime>? = null
+class PrayersAdapter : BaseAdapter<Data>() {
 
     inner class NewsViewHolder (private val binding :PrayersItemBinding):GenericViewHolder<Data>(binding.root) {
         override fun onBind(item: Data) {
@@ -29,8 +25,6 @@ class PrayersAdapter(private val context: PrayersFragment): BaseAdapter<Data>() 
                 maghribTimer.text =formatTime( item.timings.Maghrib)
                 ishaTimer.text = formatTime(item.timings.Isha)
 
-                prayersResponse = item
-                prayerTimings = prayersResponse?.toLocalTimeList()
             }
         }
     }

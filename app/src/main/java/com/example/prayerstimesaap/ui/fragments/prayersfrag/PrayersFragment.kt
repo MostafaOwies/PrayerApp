@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.prayerstimesaap.MainActivity
 import com.example.prayerstimesaap.adapters.PrayersAdapter
 import com.example.prayerstimesaap.databinding.FragmentPrayersBinding
-import com.example.prayerstimesaap.prayer.PrayerResponse
+import com.example.prayerstimesaap.prayer.TimingsResponse
 import com.example.prayerstimesaap.utils.Constants
 import com.example.prayerstimesaap.utils.Resource
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -41,9 +41,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.math.log
 
 
 @AndroidEntryPoint
@@ -58,6 +56,8 @@ class PrayersFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var adapter: PrayersAdapter
 
+    var prayersResponse: TimingsResponse? = null
+    var prayerTimings: List<LocalTime>? = null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
@@ -88,6 +88,7 @@ class PrayersFragment : Fragment() {
 
         getPrayers()
 
+        getUpcomingTimings()
 
     }
 
@@ -142,6 +143,37 @@ class PrayersFragment : Fragment() {
         return null
     }
 
+
+    private fun getUpcomingTimings() {
+        coroutineScope.launch {
+            try {
+                viewModel.upcomingPrayers.collect { response ->
+                    when (response) {
+                        is Resource.Success -> {
+                            response.data.let {
+                                prayersResponse = it
+                                prayerTimings = prayersResponse?.data?.timings?.toLocalTimeList()
+                                getCountDown()
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            Log.d(TAG, "Prayers failed${response.message}")
+                        }
+
+                        is Resource.Loading -> {
+                            Log.d(TAG, "Prayers loading")
+                        }
+
+                        else -> {}
+                    }
+                }
+            } catch (e: Exception) {
+                e.stackTrace
+            }
+        }
+    }
+
     //Fetch prayers from API
     private fun getPrayers() {
         coroutineScope.launch {
@@ -151,24 +183,6 @@ class PrayersFragment : Fragment() {
                         is Resource.Success -> {
                             response.data.let {
                                 adapter.difference.submitList(it?.data)
-
-                                /* binding?.prayerLayout?.fajrTimer?.text =
-                                                            formatTime(it?.data?.timings?.Fajr)
-                                                        binding?.prayerLayout?.dhuhrTimer?.text =
-                                                            formatTime(it?.data?.timings?.Dhuhr)
-                                                        binding?.prayerLayout?.asrTimer?.text =
-                                                            formatTime(it?.data?.timings?.Asr)
-                                                        binding?.prayerLayout?.maghribTimer?.text =
-                                                            formatTime(it?.data?.timings?.Maghrib)
-                                                        binding?.prayerLayout?.ishaTimer?.text =
-                                                            formatTime(it?.data?.timings?.Isha)
-*/
-
-
-
-                                                        //getCountDown()
-
-
                             }
                         }
 
@@ -190,22 +204,24 @@ class PrayersFragment : Fragment() {
     }
 
     //Setup recycler View
-    private fun setUpRecyclerView(){
-        adapter= PrayersAdapter(this)
-        binding?.prayerLayout?.rvPrayers?.adapter=adapter
-        binding?.prayerLayout?.rvPrayers?.layoutManager= LinearLayoutManager(activity)
-        binding?.prayerLayout?.rvPrayers?.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+    private fun setUpRecyclerView() {
+        adapter = PrayersAdapter()
+        binding?.prayerLayout?.rvPrayers?.adapter = adapter
+        binding?.prayerLayout?.rvPrayers?.layoutManager = LinearLayoutManager(activity)
+        binding?.prayerLayout?.rvPrayers?.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding?.prayerLayout?.rvPrayers)
-        binding?.prayerLayout?.viewPager?.adapter = PrayersAdapter(this)
+        binding?.prayerLayout?.viewPager?.adapter = PrayersAdapter()
     }
+
 
     //Setup the count down for the upcoming prayer
     private fun getCountDown() {
         val currentDate = LocalDate.now()
         val currentTime = LocalTime.now()
 
-        val upcomingPrayer = adapter.prayerTimings
+        val upcomingPrayer = prayerTimings
             ?.map { LocalTime.of(it.hour, it.minute) } // Convert prayer times to LocalTime
             ?.filter { time ->
                 LocalDateTime.of(currentDate, time) > LocalDateTime.of(
@@ -213,7 +229,7 @@ class PrayersFragment : Fragment() {
                     currentTime
                 )
             }
-            ?.minOrNull() ?: adapter.prayerTimings?.first()
+            ?.minOrNull() ?: prayerTimings?.first()
 
         val prayerTimeForNextDay = upcomingPrayer?.isBefore(currentTime)
 
@@ -249,23 +265,15 @@ class PrayersFragment : Fragment() {
     // allocate the prayer name according to the upcoming prayer
     private fun getUpcomingPrayerName(prayerTime: LocalTime?): String {
         return when (prayerTime) {
-            adapter.prayerTimings?.get(0) -> "Fajr"
-            adapter.prayerTimings?.get(1) -> "Dhuhr"
-            adapter.prayerTimings?.get(2) -> "Asr"
-            adapter.prayerTimings?.get(3) -> "Maghrib"
-            adapter.prayerTimings?.get(4) -> "Isha"
+            prayerTimings?.get(0) -> "Fajr"
+            prayerTimings?.get(1) -> "Dhuhr"
+            prayerTimings?.get(2) -> "Asr"
+            prayerTimings?.get(3) -> "Maghrib"
+            prayerTimings?.get(4) -> "Isha"
             else -> ""
         }
     }
 
-    //format prayers timing in 12h format
-    private fun formatTime(time: String?): String {
-        time?.let {
-            val localTime = LocalTime.parse(it)
-            return localTime.format(DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH))
-        }
-        return ""
-    }
 
     private fun hideActionBar() {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
