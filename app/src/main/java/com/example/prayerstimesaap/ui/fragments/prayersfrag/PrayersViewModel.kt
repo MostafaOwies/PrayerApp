@@ -1,9 +1,13 @@
 package com.example.prayerstimesaap.ui.fragments.prayersfrag
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.prayerstimesaap.MyApplication
 import com.example.prayerstimesaap.networking.UpcomingPrayersUseCase
 import com.example.prayerstimesaap.networking.prayers.PrayersRepo
 import com.example.prayerstimesaap.networking.prayers.PrayersUseCase
@@ -17,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -39,19 +44,20 @@ class PrayersViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val date: String = SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date()).toString()
+            val date: String =
+                SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date()).toString()
 
             val currentDate = LocalDate.now()
             val currentMonth = currentDate.monthValue
             val currentYear = currentDate.year
             val method = 5
-            getUpcomingPrayers(date, "Cairo","eg", 5)
+            getUpcomingPrayers(date, "Cairo", "eg", 5)
             getPrayers(currentYear, currentMonth, "Cairo", "eg", method)
         }
     }
 
 
-    private fun saveTimings(timings: Timings) =viewModelScope.launch {
+    private fun saveTimings(timings: Timings) = viewModelScope.launch {
         prayersRepo.insertTimings(timings)
     }
 
@@ -60,26 +66,75 @@ class PrayersViewModel @Inject constructor(
         month: Int,
         city: String,
         country: String,
-        method:Int
+        method: Int
     ) =
         withContext(Dispatchers.Default) {
             try {
-                _prayers.value = Resource.Loading()
-                _prayers.value = prayersUseCase.handlePrayersResponse(prayersRepo.getPrayers(year, month, city, country, method))
-               prayers.collect{ it.data?.data?.forEach {data -> saveTimings(data.timings) } }
+                if (isNetworkConnected(MyApplication().applicationContext)) {
+                    _prayers.value = Resource.Loading()
+                    _prayers.value = prayersUseCase.handlePrayersResponse(
+                        prayersRepo.getPrayers(
+                            year,
+                            month,
+                            city,
+                            country,
+                            method
+                        )
+                    )
+                    prayers.collect { it.data?.data?.forEach { data -> saveTimings(data.timings) } }
+                } else {
+                    _prayers.value = (Resource.Error("No internet connection"))
+                }
+
             } catch (t: Throwable) {
-                throw t
+                when (t) {
+                    is IOException -> _prayers.value = Resource.Error("Network Failure")
+                    else -> _prayers.value = Resource.Error("Conversion Error")
+                }
             }
         }
 
-    override suspend fun getUpcomingPrayers(date: String, city:String,countryCode: String, method: Int) =
+    override suspend fun getUpcomingPrayers(
+        date: String,
+        city: String,
+        countryCode: String,
+        method: Int
+    ) =
         withContext(Dispatchers.Default) {
 
             try {
-                _upcomingPrayers.value = Resource.Loading()
-                _upcomingPrayers.value = upcomingPrayersUseCase.handlePrayersResponse(prayersRepo.getTimings(date,city, countryCode, method))
+                if (isNetworkConnected(MyApplication().applicationContext)) {
+                    _upcomingPrayers.value = Resource.Loading()
+                    _upcomingPrayers.value = upcomingPrayersUseCase.handlePrayersResponse(
+                        prayersRepo.getTimings(
+                            date,
+                            city,
+                            countryCode,
+                            method
+                        )
+                    )
+                } else {
+                    _upcomingPrayers.value = (Resource.Error("No internet connection"))
+                }
             } catch (t: Throwable) {
-                throw t
+                when (t) {
+                    is IOException -> _upcomingPrayers.value = Resource.Error("Network Failure")
+                    else -> _upcomingPrayers.value = Resource.Error("Conversion Error")
+                }
             }
         }
+
+    private fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+            ?: return false
+
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    }
+
 }
