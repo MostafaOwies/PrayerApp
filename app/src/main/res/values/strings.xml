@@ -21,5 +21,6 @@
     <string name="location">location\n</string>
     <string name="approximate">Approximate Qibla Direction\nMansoura Qism 2 </string>
     <string name="kaaba">kaaba image</string>
+    <string name="no_ineterent_connection_available">Internet Connection not Available</string>
 
 </resources>

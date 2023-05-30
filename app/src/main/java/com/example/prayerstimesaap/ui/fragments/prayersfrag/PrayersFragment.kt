@@ -3,10 +3,13 @@ package com.example.prayerstimesaap.ui.fragments.prayersfrag
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +21,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.prayerstimesaap.MainActivity
+import com.example.prayerstimesaap.adapters.PrayersAdapter
 import com.example.prayerstimesaap.databinding.FragmentPrayersBinding
-import com.example.prayerstimesaap.prayers.PrayerResponse
+import com.example.prayerstimesaap.prayer.Data
+import com.example.prayerstimesaap.prayer.TimingsResponse
 import com.example.prayerstimesaap.utils.Constants
 import com.example.prayerstimesaap.utils.Resource
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -52,14 +59,18 @@ class PrayersFragment : Fragment() {
 
     private lateinit var viewModel: PrayersViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var adapter: PrayersAdapter
 
+    var prayersResponse: TimingsResponse? = null
+    var prayerTimings: List<LocalTime>? = null
+
+    var currentDate = LocalDate.now()
+    var filteredPrayers :List<Data>?= null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-    private var prayersResponse: PrayerResponse? = null
-    private var prayerTimings: List<LocalTime>? = null
 
 
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
@@ -77,7 +88,7 @@ class PrayersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).prayersViewModel
-
+        setUpRecyclerView()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -85,7 +96,33 @@ class PrayersFragment : Fragment() {
 
         getPrayers()
 
+        getUpcomingTimings()
 
+        if (isNetworkConnected(requireContext())){
+            binding?.locationLayout?.locationTv?.visibility=View.VISIBLE
+            binding?.locationLayout?.locationPngIV?.visibility=View.VISIBLE
+            binding?.locationLayout?.noConnectionIV?.visibility=View.GONE
+            binding?.locationLayout?.noConnectionTtv?.visibility=View.GONE
+        }else{
+            binding?.locationLayout?.locationTv?.visibility=View.GONE
+            binding?.locationLayout?.locationPngIV?.visibility=View.GONE
+            binding?.locationLayout?.noConnectionIV?.visibility=View.VISIBLE
+            binding?.locationLayout?.noConnectionTtv?.visibility=View.VISIBLE
+        }
+
+    }
+
+    private fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+            ?: return false
+
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 
     //Check for Location Permission
@@ -117,9 +154,16 @@ class PrayersFragment : Fragment() {
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     coroutineScope.launch {
                         try {
-                            val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                            val addresses =
+                                geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                             val country = addresses?.let { getCountryName(it) }
+                            val city = addresses?.let { getCityOnly(it) }
                             binding?.locationLayout?.locationTv?.text = country
+                            val currentDate = LocalDate.now()
+                            val currentMonth = currentDate.monthValue
+                            val currentYear = currentDate.year
+                            val method = 5
+                            viewModel.getPrayers(currentYear, currentMonth, city!!, "eg", method)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -127,41 +171,34 @@ class PrayersFragment : Fragment() {
                 }
             }
     }
+
     private fun getCountryName(addresses: List<Address>): String? {
         if (addresses.isNotEmpty()) {
             val address = addresses[0]
             val country = address.countryName
-            val city= address.subAdminArea
+            val city = address.subAdminArea
             return "$country,  $city"
         }
         return null
     }
+    private fun getCityOnly(addresses: List<Address>): String? {
+        if (addresses.isNotEmpty()) {
+            val address = addresses[0]
+            return address.subAdminArea
+        }
+        return null
+    }
 
-    //Fetch prayers from API
-    private fun getPrayers() {
+
+    private fun getUpcomingTimings() {
         coroutineScope.launch {
             try {
-                viewModel.prayers.collect { response ->
+                viewModel.upcomingPrayers.collect { response ->
                     when (response) {
                         is Resource.Success -> {
                             response.data.let {
-                                binding?.prayerLayout?.fajrTimer?.text =
-                                    formatTime(it?.data?.timings?.Fajr)
-                                binding?.prayerLayout?.dhuhrTimer?.text =
-                                    formatTime(it?.data?.timings?.Dhuhr)
-                                binding?.prayerLayout?.asrTimer?.text =
-                                    formatTime(it?.data?.timings?.Asr)
-                                binding?.prayerLayout?.maghribTimer?.text =
-                                    formatTime(it?.data?.timings?.Maghrib)
-                                binding?.prayerLayout?.ishaTimer?.text =
-                                    formatTime(it?.data?.timings?.Isha)
-
                                 prayersResponse = it
                                 prayerTimings = prayersResponse?.data?.timings?.toLocalTimeList()
-                                Log.d(TAG, "aaaaaaaaaaaaa${prayerTimings.toString()}")
-                                Log.d(TAG, "Prayers${it?.data?.timings}")
-
-
                                 getCountDown()
                             }
                         }
@@ -182,6 +219,62 @@ class PrayersFragment : Fragment() {
             }
         }
     }
+
+    //Fetch prayers from API
+    private fun getPrayers() {
+        coroutineScope.launch {
+            try {
+                viewModel.prayers.collect { response ->
+                    when (response) {
+                        is Resource.Success -> {
+                            response.data.let {
+                                Log.d(TAG, "Prayers failed${it?.data}")
+                                filteredPrayers = it?.data?.filter { prayer ->
+                                    val prayerDate = LocalDate.parse(prayer.date.gregorian.date, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                                    prayerDate >= currentDate
+                                }
+
+                                adapter.difference.submitList(filteredPrayers)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            Log.d(TAG, "Prayers failed${response.message}")
+                        }
+
+                        is Resource.Loading -> {
+                            Log.d(TAG, "Prayers loading")
+                        }
+
+                        else -> {}
+                    }
+                }
+            } catch (e: Exception) {
+                e.stackTrace
+            }
+        }
+    }
+
+    //Setup recycler View
+    private fun setUpRecyclerView() {
+        adapter = PrayersAdapter()
+        binding?.prayerLayout?.rvPrayers?.adapter = adapter
+        binding?.prayerLayout?.rvPrayers?.layoutManager = LinearLayoutManager(activity)
+        binding?.prayerLayout?.rvPrayers?.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val pagerSnapHelper = PagerSnapHelper()
+        pagerSnapHelper.attachToRecyclerView(binding?.prayerLayout?.rvPrayers)
+        binding?.prayerLayout?.viewPager?.adapter = PrayersAdapter()
+
+        binding?.prayerLayout?.nextDay?.setOnClickListener {
+           adapter.scrollToNextItem( binding!!.prayerLayout.rvPrayers)
+        }
+
+        binding?.prayerLayout?.prevDay?.setOnClickListener {
+            adapter.scrollToPreviousItem( binding!!.prayerLayout.rvPrayers)
+        }
+    }
+
 
     //Setup the count down for the upcoming prayer
     private fun getCountDown() {
@@ -241,14 +334,6 @@ class PrayersFragment : Fragment() {
         }
     }
 
-    //format prayers timing in 12h format
-    private fun formatTime(time: String?): String {
-        time?.let {
-            val localTime = LocalTime.parse(it)
-            return localTime.format(DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH))
-        }
-        return ""
-    }
 
     private fun hideActionBar() {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
