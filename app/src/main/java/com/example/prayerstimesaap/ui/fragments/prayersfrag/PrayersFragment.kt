@@ -224,6 +224,14 @@ class PrayersFragment : Fragment() {
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding?.prayerLayout?.rvPrayers)
         binding?.prayerLayout?.viewPager?.adapter = PrayersAdapter()
+
+        binding?.prayerLayout?.nextDay?.setOnClickListener {
+           adapter.scrollToNextItem( binding!!.prayerLayout.rvPrayers)
+        }
+
+        binding?.prayerLayout?.prevDay?.setOnClickListener {
+            adapter.scrollToPreviousItem( binding!!.prayerLayout.rvPrayers)
+        }
     }
 
 

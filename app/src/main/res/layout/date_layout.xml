@@ -16,8 +16,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textSize="@dimen/txt_large"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/next_day"
-        app:layout_constraintStart_toEndOf="@+id/prev_day"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -39,36 +39,6 @@
         app:layout_constraintStart_toStartOf="@+id/day_title"
         app:layout_constraintTop_toBottomOf="@id/day_title" />
 
-    <TextView
-        android:id="@+id/prev_day"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:paddingHorizontal="@dimen/pad_xlarge"
-        android:paddingVertical="@dimen/pad_xlarge"
-        android:text="@string/prev"
-        android:textAlignment="center"
-        android:textSize="@dimen/txt_xlarge"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/next_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:paddingHorizontal="@dimen/pad_xlarge"
-        android:paddingVertical="@dimen/pad_xlarge"
-        android:text="@string/next"
-        android:textAlignment="center"
-        android:textSize="@dimen/txt_xlarge"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

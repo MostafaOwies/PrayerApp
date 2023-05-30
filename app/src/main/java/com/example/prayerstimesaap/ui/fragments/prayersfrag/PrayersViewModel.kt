@@ -1,5 +1,6 @@
 package com.example.prayerstimesaap.ui.fragments.prayersfrag
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -7,7 +8,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.prayerstimesaap.MyApplication
 import com.example.prayerstimesaap.networking.UpcomingPrayersUseCase
 import com.example.prayerstimesaap.networking.prayers.PrayersRepo
 import com.example.prayerstimesaap.networking.prayers.PrayersUseCase
@@ -16,6 +16,7 @@ import com.example.prayerstimesaap.prayer.Timings
 import com.example.prayerstimesaap.prayer.TimingsResponse
 import com.example.prayerstimesaap.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,11 +30,13 @@ import java.util.Locale
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
+@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class PrayersViewModel @Inject constructor(
     private val prayersRepo: PrayersRepo,
     private val prayersUseCase: PrayersUseCase,
-    private val upcomingPrayersUseCase: UpcomingPrayersUseCase
+    private val upcomingPrayersUseCase: UpcomingPrayersUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel(), IPrayersViewModel {
 
     private val _prayers = MutableStateFlow<Resource<PrayerResponse>>(Resource.Empty())
@@ -70,7 +73,7 @@ class PrayersViewModel @Inject constructor(
     ) =
         withContext(Dispatchers.Default) {
             try {
-                if (isNetworkConnected(MyApplication().applicationContext)) {
+                if (isNetworkConnected(context)) {
                     _prayers.value = Resource.Loading()
                     _prayers.value = prayersUseCase.handlePrayersResponse(
                         prayersRepo.getPrayers(
@@ -103,7 +106,7 @@ class PrayersViewModel @Inject constructor(
         withContext(Dispatchers.Default) {
 
             try {
-                if (isNetworkConnected(MyApplication().applicationContext)) {
+                if (isNetworkConnected(context)) {
                     _upcomingPrayers.value = Resource.Loading()
                     _upcomingPrayers.value = upcomingPrayersUseCase.handlePrayersResponse(
                         prayersRepo.getTimings(
