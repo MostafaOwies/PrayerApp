@@ -18,6 +18,37 @@
 
 
             <TextView
+                android:id="@+id/no_connection_ttv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_ineterent_connection_available"
+                android:textSize="@dimen/txt_large"
+                android:visibility="gone"
+                tools:visibility="visible"
+
+                app:layout_constraintTop_toBottomOf="@id/no_connection_IV"
+                app:layout_constraintEnd_toEndOf="@id/no_connection_IV"
+                app:layout_constraintStart_toStartOf="@id/no_connection_IV"
+                />
+
+            <ImageView
+                android:id="@+id/no_connection_IV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:padding="@dimen/pad_large"
+                android:src="@drawable/no_connection_24"
+                app:tint="@color/md_theme_light_primary"
+                android:contentDescription="@string/location_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+
+                />
+            <TextView
                 android:id="@+id/location_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -3,10 +3,13 @@ package com.example.prayerstimesaap.ui.fragments.prayersfrag
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -95,6 +98,31 @@ class PrayersFragment : Fragment() {
 
         getUpcomingTimings()
 
+        if (isNetworkConnected(requireContext())){
+            binding?.locationLayout?.locationTv?.visibility=View.VISIBLE
+            binding?.locationLayout?.locationPngIV?.visibility=View.VISIBLE
+            binding?.locationLayout?.noConnectionIV?.visibility=View.GONE
+            binding?.locationLayout?.noConnectionTtv?.visibility=View.GONE
+        }else{
+            binding?.locationLayout?.locationTv?.visibility=View.GONE
+            binding?.locationLayout?.locationPngIV?.visibility=View.GONE
+            binding?.locationLayout?.noConnectionIV?.visibility=View.VISIBLE
+            binding?.locationLayout?.noConnectionTtv?.visibility=View.VISIBLE
+        }
+
+    }
+
+    private fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+            ?: return false
+
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 
     //Check for Location Permission
