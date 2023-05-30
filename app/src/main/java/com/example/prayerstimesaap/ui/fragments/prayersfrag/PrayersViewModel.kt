@@ -8,6 +8,7 @@ import com.example.prayerstimesaap.networking.UpcomingPrayersUseCase
 import com.example.prayerstimesaap.networking.prayers.PrayersRepo
 import com.example.prayerstimesaap.networking.prayers.PrayersUseCase
 import com.example.prayerstimesaap.prayer.PrayerResponse
+import com.example.prayerstimesaap.prayer.Timings
 import com.example.prayerstimesaap.prayer.TimingsResponse
 import com.example.prayerstimesaap.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,13 +45,15 @@ class PrayersViewModel @Inject constructor(
             val currentMonth = currentDate.monthValue
             val currentYear = currentDate.year
             val method = 5
-
-            getPrayers(currentYear, currentMonth, "Cairo", "eg", method)
-
             getUpcomingPrayers(date, "Cairo","eg", 5)
+            getPrayers(currentYear, currentMonth, "Cairo", "eg", method)
         }
     }
 
+
+    private fun saveTimings(timings: Timings) =viewModelScope.launch {
+        prayersRepo.insertTimings(timings)
+    }
 
     override suspend fun getPrayers(
         year: Int,
@@ -62,15 +65,8 @@ class PrayersViewModel @Inject constructor(
         withContext(Dispatchers.Default) {
             try {
                 _prayers.value = Resource.Loading()
-                _prayers.value = prayersUseCase.handlePrayersResponse(
-                    prayersRepo.getPrayers(
-                        year,
-                        month,
-                        city,
-                        country,
-                        method
-                    )
-                )
+                _prayers.value = prayersUseCase.handlePrayersResponse(prayersRepo.getPrayers(year, month, city, country, method))
+               prayers.collect{ it.data?.data?.forEach {data -> saveTimings(data.timings) } }
             } catch (t: Throwable) {
                 throw t
             }
