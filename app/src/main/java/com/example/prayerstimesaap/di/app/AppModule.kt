@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.prayerstimesaap.networking.prayers.PrayersApi
 import com.example.prayerstimesaap.data.PrayerDB
+import com.example.prayerstimesaap.data.PrayersDao
 import com.example.prayerstimesaap.di.RetrofitQ
 import com.example.prayerstimesaap.networking.UrlProvider
 import com.example.prayerstimesaap.networking.qibla.QiblaApi
@@ -17,8 +18,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,6 +42,11 @@ class AppModule {
         ).fallbackToDestructiveMigration().build()
 
 
+    @Provides
+    @AppScope
+    fun provideActionDao(db: PrayerDB): PrayersDao {
+        return db.getPrayersDao()
+    }
 
     @Provides
     @AppScope
