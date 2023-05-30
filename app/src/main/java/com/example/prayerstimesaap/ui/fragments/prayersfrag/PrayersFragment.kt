@@ -129,7 +129,13 @@ class PrayersFragment : Fragment() {
                             val addresses =
                                 geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                             val country = addresses?.let { getCountryName(it) }
+                            val city = addresses?.let { getCityOnly(it) }
                             binding?.locationLayout?.locationTv?.text = country
+                            val currentDate = LocalDate.now()
+                            val currentMonth = currentDate.monthValue
+                            val currentYear = currentDate.year
+                            val method = 5
+                            viewModel.getPrayers(currentYear, currentMonth, city!!, "eg", method)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -144,6 +150,13 @@ class PrayersFragment : Fragment() {
             val country = address.countryName
             val city = address.subAdminArea
             return "$country,  $city"
+        }
+        return null
+    }
+    private fun getCityOnly(addresses: List<Address>): String? {
+        if (addresses.isNotEmpty()) {
+            val address = addresses[0]
+            return address.subAdminArea
         }
         return null
     }

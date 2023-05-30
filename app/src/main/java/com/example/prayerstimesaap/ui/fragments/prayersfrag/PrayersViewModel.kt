@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -49,13 +48,8 @@ class PrayersViewModel @Inject constructor(
         viewModelScope.launch {
             val date: String =
                 SimpleDateFormat("dd-mm-yyyy", Locale.getDefault()).format(Date()).toString()
-
-            val currentDate = LocalDate.now()
-            val currentMonth = currentDate.monthValue
-            val currentYear = currentDate.year
             val method = 5
-            getUpcomingPrayers(date, "Cairo", "eg", 5)
-            getPrayers(currentYear, currentMonth, "Cairo", "eg", method)
+            getUpcomingPrayers(date, "EL Mansoura", "eg", method)
         }
     }
 
