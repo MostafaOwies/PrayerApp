@@ -2,9 +2,12 @@ package com.example.prayerstimesaap.ui.fragments.qiblafrag
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -73,6 +76,14 @@ class QiblaFragmnet : Fragment() {
 
         compassManager.start()
 
+        if (isNetworkConnected(requireContext())){
+            binding?.qiblaLayout?.qiblaLayoutConstraint?.visibility=View.VISIBLE
+            binding?.noConnectionLayout?.layoutNoConnection?.visibility=View.GONE
+        }else{
+            binding?.noConnectionLayout?.layoutNoConnection?.visibility=View.VISIBLE
+            binding?.qiblaLayout?.qiblaLayoutConstraint?.visibility=View.GONE
+        }
+
     }
 
     private fun getQibla() {
@@ -103,6 +114,19 @@ class QiblaFragmnet : Fragment() {
                 e.stackTrace
             }
         }
+    }
+
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+            ?: return false
+
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 
     private fun getLocation() {

@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
+    android:id="@+id/qibla_layout_constraint"
+
     xmlns:tools="http://schemas.android.com/tools"
 >
 

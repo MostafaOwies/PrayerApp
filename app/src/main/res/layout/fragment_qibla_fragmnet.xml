@@ -17,9 +17,18 @@
             <include
                 android:id="@+id/qibla_layout"
                 layout="@layout/qibla_layout"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/pad_small" />
+            <include
+                android:id="@+id/no_connection_layout"
+                layout="@layout/no_internet_layout"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/pad_small" />
+
         </LinearLayout>
     </ScrollView>
 </layout>
